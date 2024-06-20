@@ -9,20 +9,33 @@ const questions = [
     options: ["Sweet", "Savoury"]
   },
   {
+    question: "For?",
+    options: ["Breakfast", "Lunch", "Dinner", "Snack"]
+  },
+  {
     question: "For how many people?",
     options: ["1", "2"]
   },
   {
     question: "How hungry are you?",
     options: ["Not so hungry", "Pretty hungry", "Very hungry"]
+  },
+  {
+    question: "What specific nutrients are you looking for?",
+    options: []
   }
 ];
+
+const nutrientsOptions = ["Soluble fibre", "Protein", "Carbohydrates", "Vitamins", "Minerals", "Fats", "Water"];
+const amountOptions = ["a small amount of", "a normal amount of", "a large amount of"];
 
 const Chatbot = () => {
   const [chatHistory, setChatHistory] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [responses, setResponses] = useState({});
   const [peopleCount, setPeopleCount] = useState("3");
+  const [nutrientRows, setNutrientRows] = useState([{ amount: "", nutrient: "" }]);
+  const [editing, setEditing] = useState(false);
 
   const handleOptionClick = (option) => {
     const newChatHistory = [...chatHistory, { from: 'bot', message: questions[currentQuestionIndex].question }, { from: 'user', message: option }];
@@ -60,11 +73,60 @@ const Chatbot = () => {
     setCurrentQuestionIndex(currentQuestionIndex + 1);
   };
 
+  const handleNutrientChange = (index, key, value) => {
+    const updatedRows = nutrientRows.map((row, i) => (i === index ? { ...row, [key]: value } : row));
+    setNutrientRows(updatedRows);
+  };
+
+  const addNutrientRow = () => {
+    setNutrientRows([...nutrientRows, { amount: "", nutrient: "" }]);
+  };
+
+  const handleNutrientSubmit = () => {
+    const validRows = nutrientRows.filter(row => row.amount && row.nutrient);
+    const newChatHistory = [
+      ...chatHistory,
+      { from: 'bot', message: questions[currentQuestionIndex].question },
+      {
+        from: 'user',
+        message: (
+          <ul>
+            {validRows.map((row, i) => (
+              <li key={i}>{row.amount} {row.nutrient}</li>
+            ))}
+          </ul>
+        )
+      }
+    ];
+    setChatHistory(newChatHistory);
+    setResponses({
+      ...responses,
+      [questions[currentQuestionIndex].question]: validRows
+    });
+    setCurrentQuestionIndex(-1);  // End the questions
+  };
+
   const handleRestartChat = () => {
     setChatHistory([]);
     setCurrentQuestionIndex(0);
     setResponses({});
     setPeopleCount("3");
+    setNutrientRows([{ amount: "", nutrient: "" }]);
+  };
+
+  const handleEditResponses = () => {
+    setEditing(true);
+    setCurrentQuestionIndex(0);
+    setChatHistory([]);
+  };
+
+  const handleSubmitEditedResponse = (question, newResponse) => {
+    setResponses({ ...responses, [question]: newResponse });
+    setCurrentQuestionIndex(currentQuestionIndex + 1);
+    if (currentQuestionIndex >= questions.length - 1) {
+      setEditing(false);
+      setCurrentQuestionIndex(-1);
+    }
   };
 
   return (
@@ -78,22 +140,44 @@ const Chatbot = () => {
           <Options
             options={questions[currentQuestionIndex].options}
             onOptionClick={handleOptionClick}
-            showPeopleInput={currentQuestionIndex === 1}
+            showPeopleInput={currentQuestionIndex === 2}
             peopleCount={peopleCount}
             onPeopleChange={handlePeopleChange}
             onPeopleInputChange={handlePeopleInputChange}
             onPeopleSubmit={handlePeopleSubmit}
+            showNutrientInputs={currentQuestionIndex === 4}
+            nutrientRows={nutrientRows}
+            onNutrientChange={handleNutrientChange}
+            addNutrientRow={addNutrientRow}
+            onNutrientSubmit={handleNutrientSubmit}
+            amountOptions={amountOptions}
+            nutrientsOptions={nutrientsOptions}
+            isEditing={editing}
+            currentResponse={responses[questions[currentQuestionIndex].question]}
+            onSubmitEditedResponse={handleSubmitEditedResponse}
           />
         </div>
       )}
       <div className="responses">
         <h3>User Responses:</h3>
-        <ul>
+        <ul className="response-list">
           {Object.entries(responses).map(([question, answer], index) => (
-            <li key={index}><strong>{question}</strong>: {answer}</li>
+            <li key={index}>
+              <strong>{question}</strong>
+              {Array.isArray(answer) ? (
+                <ul>
+                  {answer.map((a, i) => (
+                    <li key={i}>{a.amount} {a.nutrient}</li>
+                  ))}
+                </ul>
+              ) : (
+                <span>{answer}</span>
+              )}
+            </li>
           ))}
         </ul>
         <button onClick={handleRestartChat} className="restart-button">Restart Chat</button>
+        <button onClick={handleEditResponses} className="edit-button">Edit Responses</button>
       </div>
     </div>
   );

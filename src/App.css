@@ -1,11 +1,21 @@
 /* File: src/App.css */
 .App {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
   height: 100vh;
   background-color: #f5f5f5;
   font-family: 'Arial', sans-serif;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.title h1 {
+  font-size: 24px;
+  color: #333;
 }
 
 .chat-window {
@@ -62,6 +72,35 @@ button:hover {
   color: white;
 }
 
+.edit-button {
+  background-color: #6c757d;
+  color: white;
+  margin-left: 10px;
+}
+
+.responses ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.responses ul > li {
+  margin-bottom: 5px;
+}
+
+.responses ul > li > strong {
+  margin-right: 10px;
+}
+
+.responses ul ul {
+  list-style-type: circle;
+  margin-top: 5px;
+  padding-left: 20px;
+}
+
+.responses ul ul li {
+  margin-bottom: 5px;
+}
+
 .options-container {
   display: flex;
   align-items: center;
@@ -75,6 +114,16 @@ button:hover {
 
 .option-button:hover {
   background-color: #5a6268;
+}
+
+.default-button {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  color: #000;
+}
+
+.default-button:hover {
+  background-color: #e9ecef;
 }
 
 .people-input {
@@ -91,17 +140,21 @@ button:hover {
   padding: 5px;
 }
 
-.submit-button {
-  background-color: #28a745;
-  color: white;
+.nutrient-inputs {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.people-input button {
-  background-color: #fff;
+.nutrient-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.nutrient-row select {
+  padding: 10px;
   border: 1px solid #ccc;
-  color: #000;
-}
-
-.people-input button:hover {
-  background-color: #e9ecef;
+  border-radius: 5px;
+  width: 45%;
 }
