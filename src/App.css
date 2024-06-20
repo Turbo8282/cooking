@@ -40,3 +40,36 @@ button {
   padding-top: 10px;
   border-top: 1px solid #ccc;
 }
+
+.restart-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.restart-button:hover {
+  background-color: #0056b3;
+}
+
+.options-container {
+  display: flex;
+  align-items: center;
+}
+
+.people-input {
+  display: flex;
+  align-items: center;
+}
+
+.people-input-box {
+  width: 50px;
+  text-align: center;
+}
+
+.people-input button,
+.people-input input {
+  margin: 0 5px;
+}

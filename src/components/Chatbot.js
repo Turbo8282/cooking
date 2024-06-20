@@ -10,7 +10,7 @@ const questions = [
   },
   {
     question: "For how many people?",
-    options: ["1", "2", "Other"]
+    options: ["1", "2"]
   },
   {
     question: "How hungry are you?",
@@ -22,34 +22,49 @@ const Chatbot = () => {
   const [chatHistory, setChatHistory] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [responses, setResponses] = useState({});
-  const [otherPeopleCount, setOtherPeopleCount] = useState("");
+  const [peopleCount, setPeopleCount] = useState("3");
 
   const handleOptionClick = (option) => {
     const newChatHistory = [...chatHistory, { from: 'bot', message: questions[currentQuestionIndex].question }, { from: 'user', message: option }];
     setChatHistory(newChatHistory);
     setResponses({ ...responses, [questions[currentQuestionIndex].question]: option });
 
-    if (currentQuestionIndex === 1 && option === "Other") {
-      // Show input for custom number of people
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      if (currentQuestionIndex < questions.length - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-      } else {
-        setCurrentQuestionIndex(-1);
-      }
+      setCurrentQuestionIndex(-1);
     }
   };
 
+  const handlePeopleChange = (increment) => {
+    setPeopleCount((prevCount) => {
+      const newCount = (parseInt(prevCount, 10) || 0) + increment;
+      return newCount >= 3 ? newCount.toString() : "3";
+    });
+  };
+
   const handlePeopleInputChange = (e) => {
-    setOtherPeopleCount(e.target.value);
+    const value = e.target.value;
+    if (value === "" || (parseInt(value, 10) >= 3)) {
+      setPeopleCount(value);
+    }
   };
 
   const handlePeopleSubmit = () => {
-    const newChatHistory = [...chatHistory, { from: 'bot', message: questions[currentQuestionIndex].question }, { from: 'user', message: otherPeopleCount }];
+    const count = parseInt(peopleCount, 10);
+    const validCount = isNaN(count) || count < 3 ? "3" : peopleCount;
+    const newChatHistory = [...chatHistory, { from: 'bot', message: questions[currentQuestionIndex].question }, { from: 'user', message: validCount }];
     setChatHistory(newChatHistory);
-    setResponses({ ...responses, [questions[currentQuestionIndex].question]: otherPeopleCount });
-    setOtherPeopleCount("");
+    setResponses({ ...responses, [questions[currentQuestionIndex].question]: validCount });
+    setPeopleCount("3");
     setCurrentQuestionIndex(currentQuestionIndex + 1);
+  };
+
+  const handleRestartChat = () => {
+    setChatHistory([]);
+    setCurrentQuestionIndex(0);
+    setResponses({});
+    setPeopleCount("3");
   };
 
   return (
@@ -63,10 +78,11 @@ const Chatbot = () => {
           <Options
             options={questions[currentQuestionIndex].options}
             onOptionClick={handleOptionClick}
-            showInput={currentQuestionIndex === 1}
-            inputValue={otherPeopleCount}
-            onInputChange={handlePeopleInputChange}
-            onSubmit={handlePeopleSubmit}
+            showPeopleInput={currentQuestionIndex === 1}
+            peopleCount={peopleCount}
+            onPeopleChange={handlePeopleChange}
+            onPeopleInputChange={handlePeopleInputChange}
+            onPeopleSubmit={handlePeopleSubmit}
           />
         </div>
       )}
@@ -77,6 +93,7 @@ const Chatbot = () => {
             <li key={index}><strong>{question}</strong>: {answer}</li>
           ))}
         </ul>
+        <button onClick={handleRestartChat} className="restart-button">Restart Chat</button>
       </div>
     </div>
   );
