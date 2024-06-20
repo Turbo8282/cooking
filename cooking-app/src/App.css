@@ -1,0 +1,42 @@
+/* File: src/App.css */
+.App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.chat-window {
+  width: 300px;
+  height: 600px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow-y: auto;
+  background-color: white;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-message {
+  margin: 5px 0;
+}
+
+.chat-message.bot {
+  text-align: left;
+}
+
+.chat-message.user {
+  text-align: right;
+}
+
+button {
+  margin: 5px;
+}
+
+.responses {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid #ccc;
+}
