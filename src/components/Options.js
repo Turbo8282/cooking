@@ -5,7 +5,7 @@ const Options = ({ options, onOptionClick, showPeopleInput, peopleCount, onPeopl
   return (
     <div className="options-container">
       {options.map((option, index) => (
-        <button key={index} onClick={() => onOptionClick(option)}>{option}</button>
+        <button key={index} className="option-button" onClick={() => onOptionClick(option)}>{option}</button>
       ))}
       {showPeopleInput && (
         <div className="people-input">
@@ -17,7 +17,7 @@ const Options = ({ options, onOptionClick, showPeopleInput, peopleCount, onPeopl
             className="people-input-box"
           />
           <button onClick={() => onPeopleChange(1)}>+</button>
-          <button onClick={onPeopleSubmit}>Submit</button>
+          <button onClick={onPeopleSubmit} className="submit-button">Submit</button>
         </div>
       )}
     </div>
