@@ -36,6 +36,7 @@ const Chatbot = () => {
   const [peopleCount, setPeopleCount] = useState("3");
   const [nutrientRows, setNutrientRows] = useState([{ amount: "", nutrient: "" }]);
   const [editing, setEditing] = useState(false);
+  const [editingResponseIndex, setEditingResponseIndex] = useState(null);
 
   const handleOptionClick = (option) => {
     const newChatHistory = [...chatHistory, { from: 'bot', message: questions[currentQuestionIndex].question }, { from: 'user', message: option }];
@@ -115,31 +116,36 @@ const Chatbot = () => {
   };
 
   const handleEditResponses = () => {
-    setEditing(true);
-    setCurrentQuestionIndex(0);
-    setChatHistory([]);
+    setEditing(!editing);
   };
 
-  const handleSubmitEditedResponse = (question, newResponse) => {
-    setResponses({ ...responses, [question]: newResponse });
-    setCurrentQuestionIndex(currentQuestionIndex + 1);
-    if (currentQuestionIndex >= questions.length - 1) {
-      setEditing(false);
-      setCurrentQuestionIndex(-1);
+  const handleEdit = (index) => {
+    if (editing && chatHistory[index].from === 'user') {
+      setEditingResponseIndex(index);
+    }
+  };
+
+  const handleOptionEdit = (option) => {
+    if (editingResponseIndex !== null) {
+      const updatedChatHistory = chatHistory.map((chat, index) => index === editingResponseIndex ? { ...chat, message: option } : chat);
+      const question = chatHistory[editingResponseIndex - 1].message;
+      setChatHistory(updatedChatHistory);
+      setResponses({ ...responses, [question]: option });
+      setEditingResponseIndex(null);
     }
   };
 
   return (
     <div className="chat-window">
       {chatHistory.map((chat, index) => (
-        <ChatMessage key={index} from={chat.from} message={chat.message} />
+        <ChatMessage key={index} from={chat.from} message={chat.message} onEdit={() => handleEdit(index)} editing={editing} />
       ))}
       {currentQuestionIndex !== -1 && (
         <div className="chat-message bot">
           {questions[currentQuestionIndex].question}
           <Options
             options={questions[currentQuestionIndex].options}
-            onOptionClick={handleOptionClick}
+            onOptionClick={editingResponseIndex !== null ? handleOptionEdit : handleOptionClick}
             showPeopleInput={currentQuestionIndex === 2}
             peopleCount={peopleCount}
             onPeopleChange={handlePeopleChange}
@@ -154,7 +160,7 @@ const Chatbot = () => {
             nutrientsOptions={nutrientsOptions}
             isEditing={editing}
             currentResponse={responses[questions[currentQuestionIndex].question]}
-            onSubmitEditedResponse={handleSubmitEditedResponse}
+            onSubmitEditedResponse={handleOptionEdit}
           />
         </div>
       )}
@@ -162,10 +168,10 @@ const Chatbot = () => {
         <h3>User Responses:</h3>
         <ul className="response-list">
           {Object.entries(responses).map(([question, answer], index) => (
-            <li key={index}>
+            <li key={index} className={question === "What specific nutrients are you looking for?" ? "nutrient-response" : ""}>
               <strong>{question}</strong>
               {Array.isArray(answer) ? (
-                <ul>
+                <ul className="response-nutrient-list">
                   {answer.map((a, i) => (
                     <li key={i}>{a.amount} {a.nutrient}</li>
                   ))}
@@ -177,7 +183,7 @@ const Chatbot = () => {
           ))}
         </ul>
         <button onClick={handleRestartChat} className="restart-button">Restart Chat</button>
-        <button onClick={handleEditResponses} className="edit-button">Edit Responses</button>
+        <button onClick={handleEditResponses} className="edit-button">{editing ? 'Save Responses' : 'Edit Responses'}</button>
       </div>
     </div>
   );

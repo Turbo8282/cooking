@@ -48,6 +48,11 @@
   align-self: flex-end;
 }
 
+.chat-message.user ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
 button {
   margin: 5px;
   padding: 10px;
@@ -81,14 +86,11 @@ button:hover {
 .responses ul {
   list-style-type: none;
   padding-left: 0;
+  margin: 0;
 }
 
 .responses ul > li {
   margin-bottom: 5px;
-}
-
-.responses ul > li > strong {
-  margin-right: 10px;
 }
 
 .responses ul ul {
@@ -99,6 +101,21 @@ button:hover {
 
 .responses ul ul li {
   margin-bottom: 5px;
+}
+
+.response-list > li {
+  display: flex;
+  flex-direction: column;
+}
+
+.response-list > li > strong {
+  margin-right: 5px;
+}
+
+.response-nutrient-list {
+  list-style-type: circle;
+  margin-top: 5px;
+  padding-left: 20px;
 }
 
 .options-container {
@@ -157,4 +174,9 @@ button:hover {
   border: 1px solid #ccc;
   border-radius: 5px;
   width: 45%;
+}
+
+/* Add this section */
+.response-list > li.nutrient-response {
+  display: block;
 }
