@@ -168,7 +168,7 @@ const Chatbot = () => {
         <h3>User Responses:</h3>
         <ul className="response-list">
           {Object.entries(responses).map(([question, answer], index) => (
-            <li key={index} className={question === "What specific nutrients are you looking for?" ? "nutrient-response" : ""}>
+            <li key={index} className={question === "What specific nutrients are you looking for?" ? "nutrient-response" : "inline-response"}>
               <strong>{question}</strong>
               {Array.isArray(answer) ? (
                 <ul className="response-nutrient-list">
