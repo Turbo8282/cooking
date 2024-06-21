@@ -1,5 +1,5 @@
 // File: src/components/Chatbot.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ChatMessage from './ChatMessage';
 import Options from './Options';
 
@@ -29,7 +29,7 @@ const questions = [
 const nutrientsOptions = ["Soluble fibre", "Protein", "Carbohydrates", "Vitamins", "Minerals", "Fats", "Water"];
 const amountOptions = ["a small amount of", "a normal amount of", "a large amount of"];
 
-const Chatbot = () => {
+const Chatbot = ({ onResponsesChange }) => {
   const [chatHistory, setChatHistory] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [responses, setResponses] = useState({});
@@ -37,6 +37,10 @@ const Chatbot = () => {
   const [nutrientRows, setNutrientRows] = useState([{ amount: "", nutrient: "" }]);
   const [editing, setEditing] = useState(false);
   const [editingResponseIndex, setEditingResponseIndex] = useState(null);
+
+  useEffect(() => {
+    onResponsesChange(responses);
+  }, [responses]);
 
   const handleOptionClick = (option) => {
     const newChatHistory = [...chatHistory, { from: 'bot', message: questions[currentQuestionIndex].question }, { from: 'user', message: option }];
