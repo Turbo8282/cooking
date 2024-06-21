@@ -141,6 +141,7 @@ const Chatbot = ({ onResponsesChange }) => {
 
   return (
     <div className="chat-window">
+      <h2>Chat Window:</h2>
       {chatHistory.map((chat, index) => (
         <ChatMessage key={index} from={chat.from} message={chat.message} onEdit={() => handleEdit(index)} editing={editing} />
       ))}
