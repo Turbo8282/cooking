@@ -3,20 +3,47 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f5f5f5;
+  background-color: #f8f5e9; /* Updated background color */
   font-family: 'Arial', sans-serif;
-  padding-bottom: 20px; /* Add padding at the bottom */
+  padding-bottom: 180px; /* Increased padding at the bottom */
+  position: relative; /* To position the dark mode button */
+}
+
+.App.dark-mode {
+  background-color: #333;
+  color: #fff;
+}
+
+.dark-mode-toggle {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 15px 20px; /* Increased padding */
+  border-radius: 10px; /* Reduced border radius */
+  cursor: pointer;
+  font-size: 16px; /* Increased font size */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.dark-mode-toggle:hover {
+  background-color: #0056b3;
 }
 
 .title {
   text-align: center;
   margin-bottom: 20px;
   padding: 20px; /* Added padding */
+  width: 100%; /* Make the title section full width */
+  margin-top: 30px; /* Adjusted margin to create vertical space */
 }
 
 .title h1 {
   font-size: 36px; /* Increased font size */
-  color: #333;
+  color: inherit;
 }
 
 .chat-window {
@@ -31,6 +58,12 @@
   margin-bottom: 20px; /* Add margin at the bottom */
 }
 
+.App.dark-mode .chat-window {
+  background-color: #444;
+  color: #fff;
+  border: 1px solid #555;
+}
+
 .gpt-prompt-container {
   width: 600px; /* Increased width */
   border: 1px solid #ccc;
@@ -39,6 +72,12 @@
   padding: 20px;
   margin-top: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.App.dark-mode .gpt-prompt-container {
+  background-color: #444;
+  color: #fff;
+  border: 1px solid #555;
 }
 
 .gpt-prompt pre {
@@ -59,10 +98,18 @@
   align-self: flex-start;
 }
 
+.App.dark-mode .chat-message.bot {
+  background-color: #555;
+}
+
 .chat-message.user {
   background-color: #007bff;
   color: white;
   align-self: flex-end;
+}
+
+.App.dark-mode .chat-message.user {
+  background-color: #0056b3;
 }
 
 .chat-message.user ul {
@@ -87,6 +134,10 @@ button:hover {
   margin-top: auto;
   padding-top: 20px;
   border-top: 1px solid #ccc;
+}
+
+.App.dark-mode .responses {
+  border-top: 1px solid #555;
 }
 
 .restart-button {
