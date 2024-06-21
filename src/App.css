@@ -94,6 +94,11 @@ button:hover {
   color: white;
 }
 
+.confirm-button {
+  background-color: #007bff;
+  color: white;
+}
+
 .edit-button {
   background-color: #6c757d;
   color: white;
@@ -196,3 +201,4 @@ button:hover {
   border-radius: 5px;
   width: 45%;
 }
+
