@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import OpenAI from "openai"; 
 
 // Initialise OpenAI Client with your API Key
-const openai = new OpenAI({ apiKey: '', dangerouslyAllowBrowser: true});
+const openai = new OpenAI({ apiKey: process.env.REACT_APP_OPENAI_API_KEY, dangerouslyAllowBrowser: true});
 
 const GPTPrompt = ({ responses }) => {
   const [exportedResponses, setExportedResponses] = useState(null);
